@@ -3,12 +3,23 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "serve": "vue-cli-service serve",
+    "start": "vue-cli-service serve",
     "build": "vue-cli-service build",
-    "lint": "vue-cli-service lint"
+    "lint": "vue-cli-service lint",
+    "serve-start": "nodemon ./express/app.js"
   },
   "dependencies": {
+    "axios": "^0.21.1",
+    "bcryptjs": "^2.4.3",
     "core-js": "^3.6.5",
+    "element-ui": "^2.14.1",
+    "express": "^4.17.1",
+    "http-assert": "^1.4.1",
+    "js-cookie": "^2.2.1",
+    "jsonwebtoken": "^8.5.1",
+    "less": "^4.0.0",
+    "less-loader": "^7.2.0",
+    "mongoose": "^5.11.8",
     "vue": "^2.6.11",
     "vue-router": "^3.2.0",
     "vuex": "^3.4.0"
