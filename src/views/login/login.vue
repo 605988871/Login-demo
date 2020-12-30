@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div style="height: 100vh; width: 100vw; margin: -10px" id="content">
     <el-card shadow="hover" class="center-in-center"
       ><div slot="header" class="clearfix">
         <span style="font-size: 20px">登录</span>
@@ -20,10 +20,14 @@
           class="demo-ruleForm"
         >
           <el-form-item label="用户名" prop="username">
-            <el-input v-model.number="ruleForm.username"></el-input>
+            <el-input
+              v-model.number="ruleForm.username"
+              @keypress.native.enter="submitForm"
+            ></el-input>
           </el-form-item>
           <el-form-item label="密码" prop="pass">
             <el-input
+              @keypress.native.enter="submitForm"
               type="password"
               v-model="ruleForm.pass"
               autocomplete="off"
@@ -43,6 +47,8 @@
 <script>
 import Register from "./register.vue";
 import axios from "axios";
+import CanvasNest from "canvas-nest.js";
+
 export default {
   components: { Register },
   data() {
@@ -71,6 +77,17 @@ export default {
       },
     };
   },
+  mounted() {
+    const config = {
+      color: "0,205,205",
+      opacity: 0.7,
+      zIndex: -2,
+      count: 200,
+    };
+    this.$nextTick(() => {
+      const cn = new CanvasNest(document.getElementById("content"), config);
+    });
+  },
   methods: {
     submitForm() {
       const that = this;
@@ -84,7 +101,7 @@ export default {
           if (res.data.code == 2001) {
             this.$store.commit("setToken", res.data.token); //设置token
           }
-          console.log(this.$store.state.token)
+          this.$router.push({ name: "Home" });
         })
         .catch((err) => {
           this.$message.error("用户密码有误，请检查");
