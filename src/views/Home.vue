@@ -42,58 +42,58 @@
 
 <script>
 // @ is an alias to /src
-import axios from "axios";
-import { RENDERER } from "../utils/fish";
-import "../utils/clickCircle";
-import { L2Dwidget } from "live2d-widget";
+import axios from 'axios'
+import { RENDERER } from '../utils/fish'
+import '../utils/clickCircle'
+import { L2Dwidget } from 'live2d-widget'
 
 export default {
-  name: "Home",
+  name: 'Home',
   components: {},
   data() {
-    return {};
+    return {}
   },
   created() {},
   mounted() {
     this.$nextTick(() => {
-      var star = require("../utils/star");
-      RENDERER.init();
+      var star = require('../utils/star')
+      RENDERER.init()
       L2Dwidget.init({
         model: {
           jsonPath:
-            "https://unpkg.com/live2d-widget-model-hijiki/assets/hijiki.model.json",
+            'https://unpkg.com/live2d-widget-model-hijiki/assets/hijiki.model.json'
         },
-        display: { position: "right" },
+        display: { position: 'right' },
         mobile: { show: true },
         react: {
-          opacity: 0.8,
-        },
-      });
-    });
-    window.addEventListener("scroll", function () {
-      let t = $("body, html").scrollTop(); // 目前监听的是整个body的滚动条距离
+          opacity: 0.8
+        }
+      })
+    })
+    window.addEventListener('scroll', function() {
+      let t = $('body, html').scrollTop() // 目前监听的是整个body的滚动条距离
 
-      if (t > parseFloat($(".header").css("height"))) {
-        console.log(t);
-        $(".menu").addClass("box-active");
+      if (t > parseFloat($('.header').css('height'))) {
+        console.log(t)
+        $('.menu').addClass('box-active')
       } else {
-        $(".menu").removeClass("box-active");
+        $('.menu').removeClass('box-active')
       }
-    });
+    })
   },
-  methods: {},
-};
+  methods: {}
+}
 </script>
 
 <style lang="less" scoped>
 .home {
   height: 99vh;
   width: 100%;
-  cursor: url(https://files-cdn.cnblogs.com/files/miluluyo/cursora.ico), auto;
+  cursor: url(../assets/cursora.ico), auto;
 }
 div.home::after {
   background-image: url(https://api.imacroc.cn/acg/);
-  content: "";
+  content: '';
   background-repeat: no-repeat;
   background-position: center;
   opacity: 0.06;
@@ -130,7 +130,7 @@ div.home::after {
 }
 
 #blogTitle {
-  font-family: "blogTitle", cursive;
+  font-family: 'blogTitle', cursive;
   color: white;
   position: relative; /*脱离文档流*/
   top: 50%;

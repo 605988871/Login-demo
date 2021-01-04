@@ -1,4 +1,4 @@
-const webpack = require("webpack");
+const webpack = require('webpack')
 module.exports = {
   // 项目部署的基础路径
   // 我们默认假设你的应用将会部署在域名的根部，
@@ -47,21 +47,30 @@ module.exports = {
 
   // babel-loader 默认会跳过 node_modules 依赖。
   // 通过这个选项可以显式转译一个依赖。
-  transpileDependencies: [ /* string or regex */ ],
+  transpileDependencies: [
+    /* string or regex */
+  ],
 
   // 是否为生产环境构建生成 source map？
   productionSourceMap: false,
 
   // 调整内部的 webpack 配置。
   // 查阅 https://github.com/vuejs/vue-docs-zh-cn/blob/master/vue-cli/webpack.md
-  chainWebpack: () => {},
+  chainWebpack: config => {
+    // 让 babel 转码一些最新的 js API
+    config.module
+      .rule('image')
+      .test(/\.ico$/)
+      .use('url-loader')
+      .loader('url-loader')
+  },
   configureWebpack: {
     plugins: [
       new webpack.ProvidePlugin({
-        $: "jquery",
-        jQuery: "jquery",
-        "window.jQuery": "jquery",
-        Popper: ["popper.js", "default"]
+        $: 'jquery',
+        jQuery: 'jquery',
+        'window.jQuery': 'jquery',
+        Popper: ['popper.js', 'default']
       })
     ]
   },
