@@ -6,7 +6,8 @@
     "start": "vue-cli-service serve",
     "build": "vue-cli-service build",
     "lint": "vue-cli-service lint",
-    "serve-start": "nodemon ./express/app.js"
+    "serve-start": "nodemon ./express/app.js",
+    "start-db": "D:/software/Mongodb/bin/mongod --dbpath D:/database"
   },
   "dependencies": {
     "axios": "^0.21.1",

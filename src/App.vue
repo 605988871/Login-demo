@@ -25,4 +25,10 @@
 #nav a.router-link-exact-active {
   color: #42b983;
 }
+
+@font-face
+{
+  font-family: blogTitle;
+  src:url('./assets/Slidechunfeng-Regular.ttf')
+}
 </style>
