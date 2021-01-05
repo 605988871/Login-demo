@@ -123,6 +123,7 @@ export default {
   },
   mounted() {
     $('#showstar').remove()
+    $('#live2d-widget').remove()
     $('body').off('click')
     this.query()
   },
