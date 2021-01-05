@@ -3,12 +3,12 @@ var a_idx = 0
 var tid = ''
 $('body').on('click', function(e) {
   for (var i = 0; i < 20; i++) {
-    var $i = $('<div></div>')
+    var $i = $('<div class="i"></div>')
     var x = e.pageX,
       y = e.pageY
     var ball = 15 * Math.random()
     $i.css({
-      'z-index': 99999999999999999999,
+      'z-index': 999,
       top: y - 20,
       left: x,
       position: 'absolute',
@@ -46,6 +46,7 @@ $('body').on('click', function(e) {
       'swing',
       function() {
         $i.remove()
+        $('.i').remove()
       }
     )
   }

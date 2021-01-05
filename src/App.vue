@@ -5,6 +5,9 @@
 </template>
 
 <style>
+body {
+  min-width: 1200px;
+}
 #app {
   font-family: Avenir, Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
@@ -26,9 +29,8 @@
   color: #42b983;
 }
 
-@font-face
-{
+@font-face {
   font-family: blogTitle;
-  src:url('./assets/Slidechunfeng-Regular.ttf')
+  src: url('./assets/Slidechunfeng-Regular.ttf');
 }
 </style>

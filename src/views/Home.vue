@@ -13,9 +13,13 @@
     </div>
     <div class="menu">
       <ul>
-        <li><a>首页</a></li>
+        <li>
+          <a>首页</a>
+        </li>
         <li><a>联系</a></li>
-        <li><a>技能树</a></li>
+        <li>
+          <a><router-link :to="{ name: 'Demo' }">技能树</router-link></a>
+        </li>
         <li><a>留言板</a></li>
         <li><a>相册</a></li>
         <li><a>友链</a></li>
@@ -48,7 +52,7 @@
                 <el-tag>{{ tags.tag4 }}</el-tag>
               </el-col>
               <el-col :span="8">
-                <el-tag>{{ tags.tag6 }}</el-tag>
+                <el-tag v-if="tags.tag6">{{ tags.tag6 }}</el-tag>
               </el-col>
             </el-row>
           </el-card>
@@ -59,7 +63,7 @@
             <div class="poem-border poem-right"></div>
             <h1 style="margin-top:-20px">念两句诗</h1>
             <div class="content">{{ gushi.content }}</div>
-            <div class="info">
+            <div class="info" v-show="gushi.content">
               [{{ gushi.dynasty }}] {{ gushi.author }} 《{{ gushi.title }}》
             </div>
           </div>
@@ -86,7 +90,6 @@
 // @ is an alias to /src
 import axios from 'axios'
 import { RENDERER } from '../utils/fish'
-import '../utils/clickCircle'
 import { L2Dwidget } from 'live2d-widget'
 
 export default {
@@ -111,55 +114,50 @@ export default {
       }
     }
   },
+  computed: {},
   created() {},
-  mounted() {
+  async mounted() {
     if (typeof Storage !== 'undefined') {
       // Store
       if (localStorage.getItem('jinrishiciToken') == null) {
-        axios.get('/jinrishici/token').then(res => {
-          localStorage.setItem('jinrishiciToken', res.data.data)
-        })
-      } // Retrieve
+        await this.getToken()
+      }
+      this.jinrishiciToken = localStorage.getItem('jinrishiciToken')
+      await this.getTag()
+      await this.getContent()
+      // Retrieve
     } else {
       this.$message.err('抱歉！您的浏览器不支持 Web Storage ...')
     }
-    let jinrishiciToken = localStorage.getItem('jinrishiciToken')
-    axios
-      .get('/jinrishici/info', {
-        headers: { 'X-User-Token': jinrishiciToken }
-      })
-      .then(res => {
-        this.tags.region = res.data.data.region
-        this.tags.tag1 = res.data.data.tags[0]
-        this.tags.tag2 = res.data.data.tags[1]
-        this.tags.tag3 = res.data.data.tags[2]
-        this.tags.tag4 = res.data.data.tags[3]
-        this.tags.tag5 = res.data.data.tags[4]
-        this.tags.tag6 = res.data.data.tags[5]
-      })
-    axios
-      .get('/jinrishici/sentence', {
-        headers: { 'X-User-Token': jinrishiciToken }
-      })
-      .then(res => {
-        console.log(res)
-        this.gushi.content = res.data.data.content
-        this.gushi.dynasty = res.data.data.origin.dynasty
-        this.gushi.author = res.data.data.origin.author
-        this.gushi.title = res.data.data.origin.title
-      })
+
     this.$nextTick(() => {
+      var clickCircle = require('../utils/clickCircle')
       var star = require('../utils/star')
       RENDERER.init()
       L2Dwidget.init({
         model: {
           jsonPath:
             'https://unpkg.com/live2d-widget-model-hijiki/assets/hijiki.model.json'
+          // 'https://unpkg.com/live2d-widget-model-shizuku@latest/assets/shizuku.model.json'
         },
         display: { position: 'right' },
         mobile: { show: true },
         react: {
           opacity: 0.8
+        },
+        dialog: {
+          enable: true,
+          script: {
+            //每20s，显示一言（调用一言Api返回的句子）
+            'every idle 20s': '$hitokoto$',
+            //触摸到class='star'对象
+            'hover #jsi-flying-fish-container':
+              '星星在天上而你在我心里 (*/ω＼*)',
+            //触摸到身体
+            'tap body': '害羞⁄(⁄ ⁄•⁄ω⁄•⁄ ⁄)⁄',
+            //触摸到头部
+            'tap face': '~~'
+          }
         }
       })
     })
@@ -175,7 +173,37 @@ export default {
       }
     })
   },
-  methods: {}
+  methods: {
+    async getToken() {
+      try {
+        const res = await axios.get('/jinrishici/token')
+        localStorage.setItem('jinrishiciToken', res.data.data)
+      } catch (err) {}
+    },
+    async getTag() {
+      console.log(this.jinrishiciToken)
+      const res = await axios.get('/jinrishici/info', {
+        headers: { 'X-User-Token': this.jinrishiciToken }
+      })
+
+      this.tags.region = res.data.data.region
+      this.tags.tag1 = res.data.data.tags[0]
+      this.tags.tag2 = res.data.data.tags[1]
+      this.tags.tag3 = res.data.data.tags[2]
+      this.tags.tag4 = res.data.data.tags[3]
+      this.tags.tag5 = res.data.data.tags[4]
+      this.tags.tag6 = res.data.data.tags[5]
+    },
+    async getContent() {
+      const res = await axios.get('/jinrishici/sentence', {
+        headers: { 'X-User-Token': this.jinrishiciToken }
+      })
+      this.gushi.content = res.data.data.content
+      this.gushi.dynasty = res.data.data.origin.dynasty
+      this.gushi.author = res.data.data.origin.author
+      this.gushi.title = res.data.data.origin.title
+    }
+  }
 }
 </script>
 

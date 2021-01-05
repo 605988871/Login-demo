@@ -3,13 +3,13 @@
     express + mongoose + mongodb实现增删查编辑
     <div style="text-align: left; margin: 10px">
       <el-row>
-        <el-button type="success" @click="dialogFormVisible = true" size="mini"
-          >新增</el-button
-        >
+        <el-button type="success" @click="dialogFormVisible = true" size="mini">
+          新增
+        </el-button>
         <el-button type="danger" @click="del" size="mini">删除</el-button>
-        <el-button type="warning" @click="loginOut" size="mini"
-          >退出登录</el-button
-        >
+        <el-button type="warning" @click="loginOut" size="mini">
+          退出登录
+        </el-button>
       </el-row>
     </div>
     <el-table
@@ -19,7 +19,7 @@
       border
       @selection-change="handleSelectionChange"
     >
-      <el-table-column type="selection" width="55"> </el-table-column>
+      <el-table-column type="selection" width="55"></el-table-column>
       <el-table-column prop="name" label="姓名" width="180">
         <template slot-scope="scope">
           <div v-if="!scope.row.isEdit">
@@ -57,21 +57,24 @@
             type="primary"
             @click="handleEdit(scope.$index, scope.row)"
             v-if="!scope.row.isEdit"
-            >编辑</el-button
           >
+            编辑
+          </el-button>
           <el-button
             size="mini"
             type="success"
             @click="editFinish(scope.$index, scope.row)"
             v-else
-            >确定</el-button
           >
+            确定
+          </el-button>
           <el-button
             size="mini"
             type="danger"
             @click="handleDelete(scope.$index, scope.row)"
-            >删除</el-button
           >
+            删除
+          </el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -97,9 +100,9 @@
 
 <script>
 // @ is an alias to /src
-import axios from "axios";
+import axios from 'axios'
 export default {
-  name: "demo",
+  name: 'demo',
   components: {},
   data() {
     return {
@@ -107,112 +110,114 @@ export default {
       tableData: [],
       dialogFormVisible: false,
       form: {
-        name: "dong",
-        sex: "",
-        age: "",
+        name: 'dong',
+        sex: '',
+        age: ''
       },
-      nameEdit: "",
-      sexEdit: "",
-      ageEdit: "",
-      formLabelWidth: "120px",
-      multipleSelection: [],
-    };
+      nameEdit: '',
+      sexEdit: '',
+      ageEdit: '',
+      formLabelWidth: '120px',
+      multipleSelection: []
+    }
   },
   mounted() {
-    this.query();
+    $('#showstar').remove()
+    $('body').off('click')
+    this.query()
   },
   methods: {
     add() {
       let data = {
         name: this.form.name,
         sex: this.form.sex,
-        age: this.form.age,
-      };
-      axios.post("/api/add", data).then((res) => {
+        age: this.form.age
+      }
+      axios.post('/api/add', data).then(res => {
         this.$message({
           message: res.data.message,
-          type: "success",
-        });
-        this.dialogFormVisible = false;
-        this.query();
-      });
+          type: 'success'
+        })
+        this.dialogFormVisible = false
+        this.query()
+      })
     },
     del() {
       const obj = {
-        id: this.multipleSelection,
-      };
-      axios.post("/api/del", obj).then((res) => {
+        id: this.multipleSelection
+      }
+      axios.post('/api/del', obj).then(res => {
         this.$message({
-          message: "删除成功",
-          type: "success",
-        });
-        this.query();
-      });
+          message: '删除成功',
+          type: 'success'
+        })
+        this.query()
+      })
     },
     query() {
       const obj = {
         name: this.name,
         age: this.age,
-        sex: this.sex,
-      };
-      axios.post("/api/query", obj).then((res) => {
-        this.tableData = [];
+        sex: this.sex
+      }
+      axios.post('/api/query', obj).then(res => {
+        this.tableData = []
         res.data.map((item, index) => {
-          this.tableData.push(Object.assign(item, { isEdit: false }));
-        });
-      });
+          this.tableData.push(Object.assign(item, { isEdit: false }))
+        })
+      })
     },
     handleSelectionChange(val) {
-      this.multipleSelection = [];
-      val.forEach((e) => {
-        this.multipleSelection.push(e._id);
-      });
+      this.multipleSelection = []
+      val.forEach(e => {
+        this.multipleSelection.push(e._id)
+      })
     },
     handleEdit(index, row) {
       this.tableData.forEach((item, index) => {
-        item.isEdit = false;
-      });
-      this.nameEdit = row.name;
-      this.sexEdit = row.sex;
-      this.ageEdit = row.age;
-      row.isEdit = true;
+        item.isEdit = false
+      })
+      this.nameEdit = row.name
+      this.sexEdit = row.sex
+      this.ageEdit = row.age
+      row.isEdit = true
     },
     editFinish(index, row) {
-      row.isEdit = false;
+      row.isEdit = false
       const obj = {
         id: row._id,
         name: this.nameEdit,
         age: this.ageEdit,
-        sex: this.sexEdit,
-      };
-      this.loading = true;
-      axios.post("/api/update", obj).then((res) => {
-        this.loading = false;
+        sex: this.sexEdit
+      }
+      this.loading = true
+      axios.post('/api/update', obj).then(res => {
+        this.loading = false
         if (!res.data.successMsg) {
-          this.query();
+          this.query()
         } else {
-          row.name = this.nameEdit;
-          row.age = this.ageEdit;
-          row.sex = this.sexEdit;
+          row.name = this.nameEdit
+          row.age = this.ageEdit
+          row.sex = this.sexEdit
         }
-      });
+      })
     },
     handleDelete(index, row) {
       const obj = {
-        id: row._id,
-      };
-      axios.post("/api/del", obj).then((res) => {
+        id: row._id
+      }
+      axios.post('/api/del', obj).then(res => {
         this.$message({
-          message: "删除成功",
-          type: "success",
-        });
-        this.query();
-      });
+          message: '删除成功',
+          type: 'success'
+        })
+        this.query()
+      })
     },
     loginOut() {
-      this.$store.commit("clearToken"); //清楚token
-      location.reload(); //重新加载
-    },
-  },
-};
+      this.$store.commit('clearToken') //清楚token
+      location.reload() //重新加载
+    }
+  }
+}
 </script>
