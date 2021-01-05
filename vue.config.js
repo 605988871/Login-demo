@@ -116,6 +116,13 @@ module.exports = {
         pathRewrite: {
           '^/api': ''
         }
+      },
+      '/jinrishici': {
+        target: 'https://v2.jinrishici.com/',
+        changeOrigin: true, // 是否跨域
+        pathRewrite: {
+          '^/jinrishici': ''
+        }
       }
     },
     before: app => {}

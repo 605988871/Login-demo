@@ -24,7 +24,49 @@
         <li><a>管理</a></li>
       </ul>
     </div>
-    <div style=""></div>
+    <div>
+      <el-row style="margin:20px 20px">
+        <el-col :span="4">
+          <el-card shadow="hover" class="card">
+            <div class="region">{{ tags.region }}</div>
+            <el-row style="margin-top:30px">
+              <el-col :span="8">
+                <el-tag>{{ tags.tag1 }}</el-tag>
+              </el-col>
+              <el-col :span="8">
+                <el-tag>{{ tags.tag2 }}</el-tag>
+              </el-col>
+              <el-col :span="8">
+                <el-tag>{{ tags.tag5 }}</el-tag>
+              </el-col>
+            </el-row>
+            <el-row style="margin-top:20px">
+              <el-col :span="8">
+                <el-tag>{{ tags.tag3 }}</el-tag>
+              </el-col>
+              <el-col :span="8">
+                <el-tag>{{ tags.tag4 }}</el-tag>
+              </el-col>
+              <el-col :span="8">
+                <el-tag>{{ tags.tag6 }}</el-tag>
+              </el-col>
+            </el-row>
+          </el-card>
+        </el-col>
+        <el-col :span="16" style="text-align:center">
+          <div class="poem-wrap">
+            <div class="poem-border poem-left"></div>
+            <div class="poem-border poem-right"></div>
+            <h1 style="margin-top:-20px">念两句诗</h1>
+            <div class="content">{{ gushi.content }}</div>
+            <div class="info">
+              [{{ gushi.dynasty }}] {{ gushi.author }} 《{{ gushi.title }}》
+            </div>
+          </div>
+        </el-col>
+        <el-col :span="4" style="text-align:center"></el-col>
+      </el-row>
+    </div>
     <div
       id="jsi-flying-fish-container"
       style="
@@ -51,10 +93,61 @@ export default {
   name: 'Home',
   components: {},
   data() {
-    return {}
+    return {
+      tags: {
+        region: '',
+        tag1: '',
+        tag2: '',
+        tag3: '',
+        tag4: '',
+        tag5: '',
+        tag6: ''
+      },
+      gushi: {
+        content: '',
+        dynasty: '',
+        author: '',
+        title: ''
+      }
+    }
   },
   created() {},
   mounted() {
+    if (typeof Storage !== 'undefined') {
+      // Store
+      if (localStorage.getItem('jinrishiciToken') == null) {
+        axios.get('/jinrishici/token').then(res => {
+          localStorage.setItem('jinrishiciToken', res.data.data)
+        })
+      } // Retrieve
+    } else {
+      this.$message.err('抱歉！您的浏览器不支持 Web Storage ...')
+    }
+    let jinrishiciToken = localStorage.getItem('jinrishiciToken')
+    axios
+      .get('/jinrishici/info', {
+        headers: { 'X-User-Token': jinrishiciToken }
+      })
+      .then(res => {
+        this.tags.region = res.data.data.region
+        this.tags.tag1 = res.data.data.tags[0]
+        this.tags.tag2 = res.data.data.tags[1]
+        this.tags.tag3 = res.data.data.tags[2]
+        this.tags.tag4 = res.data.data.tags[3]
+        this.tags.tag5 = res.data.data.tags[4]
+        this.tags.tag6 = res.data.data.tags[5]
+      })
+    axios
+      .get('/jinrishici/sentence', {
+        headers: { 'X-User-Token': jinrishiciToken }
+      })
+      .then(res => {
+        console.log(res)
+        this.gushi.content = res.data.data.content
+        this.gushi.dynasty = res.data.data.origin.dynasty
+        this.gushi.author = res.data.data.origin.author
+        this.gushi.title = res.data.data.origin.title
+      })
     this.$nextTick(() => {
       var star = require('../utils/star')
       RENDERER.init()
@@ -74,9 +167,10 @@ export default {
       let t = $('body, html').scrollTop() // 目前监听的是整个body的滚动条距离
 
       if (t > parseFloat($('.header').css('height'))) {
-        console.log(t)
         $('.menu').addClass('box-active')
+        $('.card').addClass('card-active')
       } else {
+        $('.card').removeClass('card-active')
         $('.menu').removeClass('box-active')
       }
     })
@@ -87,7 +181,7 @@ export default {
 
 <style lang="less" scoped>
 .home {
-  height: 99vh;
+  height: 150vh;
   width: 100%;
   cursor: url(../assets/cursora.ico), auto;
 }
@@ -140,6 +234,9 @@ div.home::after {
 .menu {
   width: 100%;
   text-align: center;
+  z-index: 1000;
+  background: white;
+  opacity: 0.9;
   border-bottom: 1px solid rgba(138, 199, 223, 0.2);
   box-shadow: 0px 10px 15px -18px #000;
   ul {
@@ -174,5 +271,53 @@ div.home::after {
 .box-active {
   position: fixed;
   top: 0;
+}
+.card {
+  top: 20px;
+  left: 20px;
+  width: 100%;
+  height: 175px;
+}
+
+.poem-wrap {
+  position: relative;
+  width: 1000px;
+  max-width: 80%;
+  border: 2px solid #797979;
+  border-top: 0;
+  text-align: center;
+  margin: 40px auto;
+  h1 {
+    position: relative;
+    margin-top: -20px;
+    display: inline-block;
+    letter-spacing: 4px;
+    color: #797979;
+    font-size: 20px;
+    margin-bottom: 20px;
+  }
+  .content {
+    font-size: 25px;
+    font-weight: 100;
+  }
+  .info {
+    font-size: 15px;
+    margin: 15px auto;
+    color: #909399;
+  }
+}
+
+.poem-border {
+  position: absolute;
+  height: 2px;
+  width: 27%;
+  background-color: #797979;
+}
+.poem-right {
+  right: 0;
+}
+
+.poem-left {
+  left: 0;
 }
 </style>
