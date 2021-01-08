@@ -31,6 +31,6 @@ body {
 
 @font-face {
   font-family: blogTitle;
-  src: url('./assets/Slidechunfeng-Regular.ttf');
+  src: url('./assets/ttf/Slidechunfeng-Regular.ttf');
 }
 </style>

@@ -60,7 +60,12 @@ module.exports = {
     // 让 babel 转码一些最新的 js API
     config.module
       .rule('image')
-      .test(/\.ico$/)
+      .test(/\.(ico)$/)
+      .use('url-loader')
+      .loader('url-loader')
+    config.module
+      .rule('mp3')
+      .test(/\.(mp3)(\?.*)?$/)
       .use('url-loader')
       .loader('url-loader')
   },
@@ -114,6 +119,13 @@ module.exports = {
         changeOrigin: true, // 是否跨域
         pathRewrite: {
           '^/api': ''
+        }
+      },
+      '/music': {
+        target: 'http://127.0.0.1:3000',
+        changeOrigin: true, // 是否跨域
+        pathRewrite: {
+          '^/music': ''
         }
       },
       '/jinrishici': {

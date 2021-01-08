@@ -1,6 +1,7 @@
 <template>
   <div class="demo">
     express + mongoose + mongodb实现增删查编辑
+    <router-link to="/">sss</router-link>
     <div style="text-align: left; margin: 10px">
       <el-row>
         <el-button type="success" @click="dialogFormVisible = true" size="mini">
@@ -64,9 +65,16 @@
             size="mini"
             type="success"
             @click="editFinish(scope.$index, scope.row)"
-            v-else
+            v-if="scope.row.isEdit"
           >
             确定
+          </el-button>
+          <el-button
+            size="mini"
+            @click="handleCancel(scope.$index, scope.row)"
+            v-if="scope.row.isEdit"
+          >
+            取消
           </el-button>
           <el-button
             size="mini"
@@ -202,6 +210,12 @@ export default {
           row.sex = this.sexEdit
         }
       })
+    },
+    handleCancel(index, row) {
+      row.isEdit = false
+      this.nameEdit = row.name
+      this.ageEdit = row.age
+      this.sexEdit = row.sex
     },
     handleDelete(index, row) {
       const obj = {

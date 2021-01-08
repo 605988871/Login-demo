@@ -1,0 +1,154 @@
+.home {
+  height: 150vh;
+  width: 100%;
+  cursor: url(../assets/cursor/normal.ico), auto;
+  li a:hover {
+    cursor: url(../assets/cursor/ayuda.ico), auto;
+  }
+  a:active {
+    cursor: url(../assets/cursor/work.ico), alias;
+  }
+  span {
+    cursor: url(../assets/cursor/texto.ico), auto;
+  }
+}
+div.home::after {
+  background-image: url(https://api.imacroc.cn/acg/);
+  content: '';
+  background-repeat: no-repeat;
+  background-position: center;
+  opacity: 0.06;
+  -webkit-filter: grayscale(100%);
+  -moz-filter: grayscale(100%);
+  -ms-filter: grayscale(100%);
+  -o-filter: grayscale(100%);
+  filter: grayscale(100%);
+  filter: gray;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: -2;
+}
+
+.header {
+  background-image: url(../assets/img/header.jpg);
+  background-position: center;
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-attachment: initial;
+  background-origin: initial;
+  background-clip: initial;
+  background-color: rgb(34, 34, 34);
+  overflow: hidden;
+  width: 100%;
+  height: 40vh;
+  max-height: 40vh;
+  box-shadow: 0 1px 2px rgba(150, 150, 150, 0.7);
+  text-align: center;
+  display: table;
+}
+
+#blogTitle {
+  font-family: 'blogTitle', cursive;
+  color: white;
+  position: relative; /*脱离文档流*/
+  top: 50%;
+  margin-top: -50px;
+}
+
+.menu {
+  width: 100%;
+  text-align: center;
+  z-index: 1000;
+  background: white;
+  opacity: 0.9;
+  border-bottom: 1px solid rgba(138, 199, 223, 0.2);
+  box-shadow: 0px 10px 15px -18px #000;
+  ul {
+    display: flex;
+    flex-wrap: nowrap;
+    justify-content: center;
+    margin: 8px 0;
+    li {
+      display: inline-block;
+      margin: 4px;
+      text-align: center;
+      width: 84px;
+      height: 24px;
+      outline: none;
+      cursor: pointer;
+      line-height: 24px;
+      a {
+        color: #2daebf;
+        text-decoration: none;
+        margin: 0px;
+        padding-top: 4px;
+        font-weight: 400;
+        text-shadow: 1px 1px 10px #bdbaba;
+      }
+      a:hover {
+        color: #ec8836;
+        text-decoration: none; /* 不显示超链接下划线 */
+      }
+    }
+  }
+}
+.box-active {
+  position: fixed;
+  top: 0;
+}
+.card {
+  top: 20px;
+  left: 20px;
+  width: 100%;
+  height: 175px;
+}
+
+.poem-wrap {
+  position: relative;
+  width: 1000px;
+  height: 124px;
+  max-width: 80%;
+  border: 2px solid #797979;
+  border-top: 0;
+  text-align: center;
+  margin: 40px auto;
+  h1 {
+    position: relative;
+    margin-top: -20px;
+    display: inline-block;
+    letter-spacing: 4px;
+    color: #797979;
+    font-size: 20px;
+    margin-bottom: 20px;
+  }
+  .content {
+    font-size: 25px;
+    font-weight: 100;
+  }
+  .info {
+    font-size: 15px;
+    margin: 15px auto;
+    color: #909399;
+  }
+}
+
+.poem-border {
+  position: absolute;
+  height: 2px;
+  width: 27%;
+  background-color: #797979;
+}
+.poem-right {
+  right: 0;
+}
+
+.poem-left {
+  left: 0;
+}
+
+[v-cloak] {
+  display: none;
+}

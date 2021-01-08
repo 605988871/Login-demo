@@ -26,13 +26,21 @@
         <li><a>维护</a></li>
         <li><a>投喂</a></li>
         <li><a>管理</a></li>
+        <li><a @click="loginOut">退出登录</a></li>
       </ul>
     </div>
-    <div>
+    <div c>
       <el-row style="margin:20px 20px">
         <el-col :span="4">
-          <el-card shadow="hover" class="card">
-            <div class="region">{{ tags.region }}</div>
+          <el-card
+            shadow="hover"
+            class="card"
+            v-loading="loading2"
+            element-loading-spinner="el-icon-loading"
+          >
+            <div class="region">
+              <span>{{ tags.region }}</span>
+            </div>
             <el-row style="margin-top:30px">
               <el-col :span="8">
                 <el-tag>{{ tags.tag1 }}</el-tag>
@@ -58,19 +66,28 @@
           </el-card>
         </el-col>
         <el-col :span="16" style="text-align:center">
-          <div class="poem-wrap">
+          <div
+            class="poem-wrap"
+            v-loading="loading1"
+            element-loading-background="rgba(0,0,0,0)"
+          >
             <div class="poem-border poem-left"></div>
             <div class="poem-border poem-right"></div>
-            <h1 style="margin-top:-20px">念两句诗</h1>
-            <div class="content">{{ gushi.content }}</div>
+            <h1 style="margin-top:-20px"><span>念两句诗</span></h1>
+            <div class="content">
+              <span>{{ gushi.content }}</span>
+            </div>
             <div class="info" v-show="gushi.content">
-              [{{ gushi.dynasty }}] {{ gushi.author }} 《{{ gushi.title }}》
+              <span>
+                [{{ gushi.dynasty }}] {{ gushi.author }} 《{{ gushi.title }}》
+              </span>
             </div>
           </div>
         </el-col>
         <el-col :span="4" style="text-align:center"></el-col>
       </el-row>
     </div>
+    <div id="aplayer"></div>
     <div
       id="jsi-flying-fish-container"
       style="
@@ -91,12 +108,16 @@
 import axios from 'axios'
 import { RENDERER } from '../utils/fish'
 import { L2Dwidget } from 'live2d-widget'
+import APlayer from 'aplayer'
+import 'aplayer/dist/APlayer.min.css'
 
 export default {
   name: 'Home',
-  components: {},
   data() {
     return {
+      isReloadAlive: true,
+      loading1: false,
+      loading2: false,
       tags: {
         region: '',
         tag1: '',
@@ -115,8 +136,14 @@ export default {
     }
   },
   computed: {},
-  created() {},
+  created() {
+    this.L2DInit()
+  },
+  beforeDestroy() {},
   async mounted() {
+    this.loading1 = true
+    this.loading2 = true
+    await this.createAplayer()
     if (typeof Storage !== 'undefined') {
       // Store
       if (localStorage.getItem('jinrishiciToken') == null) {
@@ -129,11 +156,24 @@ export default {
     } else {
       this.$message.err('抱歉！您的浏览器不支持 Web Storage ...')
     }
+    var clickCircle = require('../utils/click')
+    var star = require('../utils/star')
+    RENDERER.init()
 
-    this.$nextTick(() => {
-      var clickCircle = require('../utils/clickCircle')
-      var star = require('../utils/star')
-      RENDERER.init()
+    window.addEventListener('scroll', function() {
+      let t = $('body, html').scrollTop() // 目前监听的是整个body的滚动条距离
+
+      if (t > parseFloat($('.header').css('height'))) {
+        $('.menu').addClass('box-active')
+        $('.card').addClass('card-active')
+      } else {
+        $('.card').removeClass('card-active')
+        $('.menu').removeClass('box-active')
+      }
+    })
+  },
+  methods: {
+    L2DInit() {
       L2Dwidget.init({
         model: {
           jsonPath:
@@ -160,20 +200,7 @@ export default {
           }
         }
       })
-    })
-    window.addEventListener('scroll', function() {
-      let t = $('body, html').scrollTop() // 目前监听的是整个body的滚动条距离
-
-      if (t > parseFloat($('.header').css('height'))) {
-        $('.menu').addClass('box-active')
-        $('.card').addClass('card-active')
-      } else {
-        $('.card').removeClass('card-active')
-        $('.menu').removeClass('box-active')
-      }
-    })
-  },
-  methods: {
+    },
     async getToken() {
       try {
         const res = await axios.get('/jinrishici/token')
@@ -181,11 +208,10 @@ export default {
       } catch (err) {}
     },
     async getTag() {
-      console.log(this.jinrishiciToken)
       const res = await axios.get('/jinrishici/info', {
         headers: { 'X-User-Token': this.jinrishiciToken }
       })
-
+      this.loading2 = false
       this.tags.region = res.data.data.region
       this.tags.tag1 = res.data.data.tags[0]
       this.tags.tag2 = res.data.data.tags[1]
@@ -198,154 +224,82 @@ export default {
       const res = await axios.get('/jinrishici/sentence', {
         headers: { 'X-User-Token': this.jinrishiciToken }
       })
+      this.loading1 = false
       this.gushi.content = res.data.data.content
       this.gushi.dynasty = res.data.data.origin.dynasty
       this.gushi.author = res.data.data.origin.author
       this.gushi.title = res.data.data.origin.title
+    },
+    async getSongUrl(keywords) {
+      const resSongId = await axios.get('/music/cloudsearch', {
+        params: {
+          keywords: keywords
+        }
+      })
+      let songId = resSongId.data.result.songs[0].id
+      // const resSongUrl = await axios.get('/music/song/url', {
+      //   params: {
+      //     id: songId
+      //   }
+      // })
+      // return resSongUrl.data.data[0].url
+      const url =
+        'https://music.163.com/song/media/outer/url?id=' + songId + '.mp3'
+      return url
+    },
+    async getSongLyric(keywords) {
+      const resSongId = await axios.get('/music/cloudsearch', {
+        params: {
+          keywords: keywords
+        }
+      })
+      let songId = resSongId.data.result.songs[0].id
+      const resSongUrl = await axios.get('/music/lyric', {
+        params: {
+          id: songId
+        }
+      })
+      return resSongUrl.data.lrc.lyric.toString()
+    },
+    async createAplayer() {
+      const ap = new APlayer({
+        container: document.getElementById('aplayer'),
+        fixed: true,
+        lrcType: 1,
+        // mini: false,
+        audio: [
+          {
+            name: '光るなら',
+            artist: 'Goose House',
+            url: await this.getSongUrl('光るなら'),
+            lrc: await this.getSongLyric('光るなら'),
+            cover:
+              'https://gimg2.baidu.com/image_search/src=http%3A%2F%2Fb-ssl.duitang.com%2Fuploads%2Fitem%2F201504%2F25%2F20150425H2120_PtLQe.thumb.700_0.jpeg&refer=http%3A%2F%2Fb-ssl.duitang.com&app=2002&size=f9999,10000&q=a80&n=0&g=0n&fmt=jpeg?sec=1612594686&t=daace713fef7674cab1fef143c148642'
+          },
+          {
+            name: ' トリカゴ',
+            artist: 'XX:me',
+            url: await this.getSongUrl('トリカゴ'),
+            lrc: await this.getSongLyric('トリカゴ'),
+            cover:
+              'https://ss1.bdstatic.com/70cFuXSh_Q1YnxGkpoWK1HF6hhy/it/u=2684230618,3665831027&fm=26&gp=0.jpg'
+          },
+          {
+            name: '夜に駆ける',
+            artist: 'YOASOBI',
+            url: await this.getSongUrl('夜に駆ける'),
+            lrc: await this.getSongLyric('夜に駆ける'),
+            cover:
+              'https://gimg2.baidu.com/image_search/src=http%3A%2F%2Ftx-free-imgs.acfun.cn%2Fo_1eedd5k9l16gi1e501jtss9mbfo0.jpeg%3Fimageslim&refer=http%3A%2F%2Ftx-free-imgs.acfun.cn&app=2002&size=f9999,10000&q=a80&n=0&g=0n&fmt=jpeg?sec=1612666822&t=c5ff4ee5ad6d73ac4079d2c49e67a127'
+          }
+        ]
+      })
+    },
+    loginOut() {
+      this.$loginOut()
     }
   }
 }
 </script>
 
-<style lang="less" scoped>
-.home {
-  height: 150vh;
-  width: 100%;
-  cursor: url(../assets/cursora.ico), auto;
-}
-div.home::after {
-  background-image: url(https://api.imacroc.cn/acg/);
-  content: '';
-  background-repeat: no-repeat;
-  background-position: center;
-  opacity: 0.06;
-  -webkit-filter: grayscale(100%);
-  -moz-filter: grayscale(100%);
-  -ms-filter: grayscale(100%);
-  -o-filter: grayscale(100%);
-  filter: grayscale(100%);
-  filter: gray;
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  z-index: -2;
-}
-
-.header {
-  background-image: url(../assets/header.jpg);
-  background-position: center;
-  background-size: cover;
-  background-repeat: no-repeat;
-  background-attachment: initial;
-  background-origin: initial;
-  background-clip: initial;
-  background-color: rgb(34, 34, 34);
-  overflow: hidden;
-  width: 100%;
-  height: 40vh;
-  max-height: 40vh;
-  box-shadow: 0 1px 2px rgba(150, 150, 150, 0.7);
-  text-align: center;
-  display: table;
-}
-
-#blogTitle {
-  font-family: 'blogTitle', cursive;
-  color: white;
-  position: relative; /*脱离文档流*/
-  top: 50%;
-  margin-top: -50px;
-}
-
-.menu {
-  width: 100%;
-  text-align: center;
-  z-index: 1000;
-  background: white;
-  opacity: 0.9;
-  border-bottom: 1px solid rgba(138, 199, 223, 0.2);
-  box-shadow: 0px 10px 15px -18px #000;
-  ul {
-    display: flex;
-    flex-wrap: nowrap;
-    justify-content: center;
-    margin: 8px 0;
-    li {
-      display: inline-block;
-      margin: 4px;
-      text-align: center;
-      width: 84px;
-      height: 24px;
-      outline: none;
-      cursor: pointer;
-      line-height: 24px;
-      a {
-        color: #2daebf;
-        text-decoration: none;
-        margin: 0px;
-        padding-top: 4px;
-        font-weight: 400;
-        text-shadow: 1px 1px 10px #bdbaba;
-      }
-      a:hover {
-        color: #ec8836;
-        text-decoration: none; /* 不显示超链接下划线 */
-      }
-    }
-  }
-}
-.box-active {
-  position: fixed;
-  top: 0;
-}
-.card {
-  top: 20px;
-  left: 20px;
-  width: 100%;
-  height: 175px;
-}
-
-.poem-wrap {
-  position: relative;
-  width: 1000px;
-  max-width: 80%;
-  border: 2px solid #797979;
-  border-top: 0;
-  text-align: center;
-  margin: 40px auto;
-  h1 {
-    position: relative;
-    margin-top: -20px;
-    display: inline-block;
-    letter-spacing: 4px;
-    color: #797979;
-    font-size: 20px;
-    margin-bottom: 20px;
-  }
-  .content {
-    font-size: 25px;
-    font-weight: 100;
-  }
-  .info {
-    font-size: 15px;
-    margin: 15px auto;
-    color: #909399;
-  }
-}
-
-.poem-border {
-  position: absolute;
-  height: 2px;
-  width: 27%;
-  background-color: #797979;
-}
-.poem-right {
-  right: 0;
-}
-
-.poem-left {
-  left: 0;
-}
-</style>
+<style lang="less" scoped></style>
