@@ -63,11 +63,6 @@ module.exports = {
       .test(/\.(ico)$/)
       .use('url-loader')
       .loader('url-loader')
-    config.module
-      .rule('mp3')
-      .test(/\.(mp3)(\?.*)?$/)
-      .use('url-loader')
-      .loader('url-loader')
   },
   configureWebpack: {
     plugins: [

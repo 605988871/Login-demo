@@ -132,6 +132,7 @@ export default {
   mounted() {
     $('#showstar').remove()
     $('#live2d-widget').remove()
+    //$('canvas').remove()
     $('body').off('click')
     this.query()
   },
@@ -169,7 +170,9 @@ export default {
         age: this.age,
         sex: this.sex
       }
+      this.loading = true
       axios.post('/api/query', obj).then(res => {
+        this.loading = false
         this.tableData = []
         res.data.map((item, index) => {
           this.tableData.push(Object.assign(item, { isEdit: false }))

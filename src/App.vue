@@ -32,5 +32,7 @@ body {
 @font-face {
   font-family: blogTitle;
   src: url('./assets/ttf/Slidechunfeng-Regular.ttf');
+  font-family: avatar;
+  src: url('./assets/ttf/Nyashi.ttf');
 }
 </style>

@@ -1,15 +1,19 @@
 .home {
-  height: 150vh;
+  height: 130vh;
   width: 100%;
-  cursor: url(../assets/cursor/normal.ico), auto;
+  cursor: url(https://cdn.jsdelivr.net/gh/LIlGG/cdn@1.0.2/img/Sakura/cursor/normal.cur),
+    auto;
   li a:hover {
-    cursor: url(../assets/cursor/ayuda.ico), auto;
+    cursor: url(https://cdn.jsdelivr.net/gh/LIlGG/cdn@1.0.2/img/Sakura/cursor/ayuda.cur),
+      auto;
   }
   a:active {
-    cursor: url(../assets/cursor/work.ico), alias;
+    cursor: url(https://cdn.jsdelivr.net/gh/LIlGG/cdn@1.0.2/img/Sakura/cursor/work.cur),
+      alias;
   }
   span {
-    cursor: url(../assets/cursor/texto.ico), auto;
+    cursor: url(https://cdn.jsdelivr.net/gh/LIlGG/cdn@1.0.2/img/Sakura/cursor/texto.cur),
+      auto;
   }
 }
 div.home::after {
@@ -149,6 +153,40 @@ div.home::after {
   left: 0;
 }
 
-[v-cloak] {
-  display: none;
+.toTop {
+  position: fixed;
+  z-index: 999;
+  right: 50px;
+  top: -900px;
+  background: url(../assets/img/scroll.png) no-repeat center;
+  height: 900px;
+  width: 70px;
+}
+
+@-webkit-keyframes show /*Safari and Chrome*/ {
+  from {
+    top: -900px;
+  }
+  to {
+    top: -300px;
+  }
+}
+
+@-webkit-keyframes hide /*Safari and Chrome*/ {
+  from {
+    top: -300px;
+  }
+  to {
+    top: -900px;
+  }
+}
+
+.show {
+  animation: show 0.5s;
+  top: -300px;
+}
+
+.hide {
+  animation: hide 2s;
+  top: -900px;
 }
