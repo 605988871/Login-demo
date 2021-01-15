@@ -90,7 +90,7 @@ module.exports = {
 
     // 为所有的 CSS 及其预处理文件开启 CSS Modules。
     // 这个选项不会影响 `*.vue` 文件。
-    modules: false
+    requireModuleExtension: true
   },
 
   // 在生产环境下为 Babel 和 TypeScript 使用 `thread-loader`
@@ -124,7 +124,7 @@ module.exports = {
         }
       },
       '/jinrishici': {
-        target: 'https://v2.jinrishici.com/',
+        target: 'https://v2.jinrishici.com',
         changeOrigin: true, // 是否跨域
         pathRewrite: {
           '^/jinrishici': ''

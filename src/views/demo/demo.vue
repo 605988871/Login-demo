@@ -1,21 +1,17 @@
 <template>
   <div class="demo">
-    express + mongoose + mongodb实现增删查编辑
-    <router-link to="/">sss</router-link>
+    <h1><span>express + mongoose + mongodb实现增删查编辑</span></h1>
     <div style="text-align: left; margin: 10px">
       <el-row>
         <el-button type="success" @click="dialogFormVisible = true" size="mini">
           新增
         </el-button>
         <el-button type="danger" @click="del" size="mini">删除</el-button>
-        <el-button type="warning" @click="loginOut" size="mini">
-          退出登录
-        </el-button>
       </el-row>
     </div>
     <el-table
       :data="tableData"
-      style="width: 100%"
+      style="width: 80%"
       v-loading="loading"
       border
       @selection-change="handleSelectionChange"
@@ -109,8 +105,9 @@
 <script>
 // @ is an alias to /src
 import axios from 'axios'
+import '@/style/animationClass.less'
 export default {
-  name: 'demo',
+  name: 'Demo',
   components: {},
   data() {
     return {
@@ -130,8 +127,6 @@ export default {
     }
   },
   mounted() {
-    $('#showstar').remove()
-    $('#live2d-widget').remove()
     //$('canvas').remove()
     $('body').off('click')
     this.query()
@@ -231,11 +226,9 @@ export default {
         })
         this.query()
       })
-    },
-    loginOut() {
-      this.$store.commit('clearToken') //清楚token
-      location.reload() //重新加载
     }
   }
 }
 </script>
+
+<style scoped></style>

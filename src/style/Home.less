@@ -1,6 +1,5 @@
 .home {
-  height: 130vh;
-  width: 100%;
+  width: 95%;
   cursor: url(https://cdn.jsdelivr.net/gh/LIlGG/cdn@1.0.2/img/Sakura/cursor/normal.cur),
     auto;
   li a:hover {
@@ -16,7 +15,7 @@
       auto;
   }
 }
-div.home::after {
+div#app::after {
   background-image: url(https://api.imacroc.cn/acg/);
   content: '';
   background-repeat: no-repeat;
@@ -36,69 +35,6 @@ div.home::after {
   z-index: -2;
 }
 
-.header {
-  background-image: url(../assets/img/header.jpg);
-  background-position: center;
-  background-size: cover;
-  background-repeat: no-repeat;
-  background-attachment: initial;
-  background-origin: initial;
-  background-clip: initial;
-  background-color: rgb(34, 34, 34);
-  overflow: hidden;
-  width: 100%;
-  height: 40vh;
-  max-height: 40vh;
-  box-shadow: 0 1px 2px rgba(150, 150, 150, 0.7);
-  text-align: center;
-  display: table;
-}
-
-#blogTitle {
-  font-family: 'blogTitle', cursive;
-  color: white;
-  position: relative; /*脱离文档流*/
-  top: 50%;
-  margin-top: -50px;
-}
-
-.menu {
-  width: 100%;
-  text-align: center;
-  z-index: 1000;
-  background: white;
-  opacity: 0.9;
-  border-bottom: 1px solid rgba(138, 199, 223, 0.2);
-  box-shadow: 0px 10px 15px -18px #000;
-  ul {
-    display: flex;
-    flex-wrap: nowrap;
-    justify-content: center;
-    margin: 8px 0;
-    li {
-      display: inline-block;
-      margin: 4px;
-      text-align: center;
-      width: 84px;
-      height: 24px;
-      outline: none;
-      cursor: pointer;
-      line-height: 24px;
-      a {
-        color: #2daebf;
-        text-decoration: none;
-        margin: 0px;
-        padding-top: 4px;
-        font-weight: 400;
-        text-shadow: 1px 1px 10px #bdbaba;
-      }
-      a:hover {
-        color: #ec8836;
-        text-decoration: none; /* 不显示超链接下划线 */
-      }
-    }
-  }
-}
 .box-active {
   position: fixed;
   top: 0;
@@ -151,42 +87,4 @@ div.home::after {
 
 .poem-left {
   left: 0;
-}
-
-.toTop {
-  position: fixed;
-  z-index: 999;
-  right: 50px;
-  top: -900px;
-  background: url(../assets/img/scroll.png) no-repeat center;
-  height: 900px;
-  width: 70px;
-}
-
-@-webkit-keyframes show /*Safari and Chrome*/ {
-  from {
-    top: -900px;
-  }
-  to {
-    top: -300px;
-  }
-}
-
-@-webkit-keyframes hide /*Safari and Chrome*/ {
-  from {
-    top: -300px;
-  }
-  to {
-    top: -900px;
-  }
-}
-
-.show {
-  animation: show 0.5s;
-  top: -300px;
-}
-
-.hide {
-  animation: hide 2s;
-  top: -900px;
 }

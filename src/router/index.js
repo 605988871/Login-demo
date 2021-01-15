@@ -19,6 +19,11 @@ const routes = [
     path: '/login',
     name: 'Login',
     component: () => import('../views/login/login.vue')
+  },
+  {
+    path: '/test',
+    name: 'Test',
+    component: () => import('../views/test.vue')
   }
 ]
 
@@ -30,7 +35,7 @@ const router = new VueRouter({
 const that = this
 //判断用户登录状态，未登录跳转到登录页面，以登录跳转到首页
 router.beforeEach((to, from, next) => {
-  //从cookie里获取token，防止刷新后 token 丢失
+  // 从cookie里获取token，防止刷新后 token 丢失
   store.commit('getToken')
   let token = store.state.token
   if (!token && to.name !== 'Login') {
