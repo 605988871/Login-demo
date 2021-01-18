@@ -2,7 +2,9 @@
   <div id="app">
     <layout v-if="showLayout"></layout>
     <transition name="fade-transform" mode="out-in">
-      <router-view />
+      <keep-alive include="Home">
+        <router-view></router-view>
+      </keep-alive>
     </transition>
     <div
       id="jsi-flying-fish-container"

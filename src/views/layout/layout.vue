@@ -22,7 +22,9 @@
         <li>
           <router-link :to="{ path: '/test' }">水墨按钮</router-link>
         </li>
-        <li><a>相册</a></li>
+        <li>
+          <router-link :to="{ path: '/cloudMusic' }">网易云api</router-link>
+        </li>
         <li><a>友链</a></li>
         <li><a>维护</a></li>
         <li><a>投喂</a></li>
