@@ -91,6 +91,10 @@ export default {
   position: relative; /*脱离文档流*/
   top: 50%;
   margin-top: -50px;
+  a,
+  h2 {
+    color: white !important;
+  }
 }
 
 .menu {

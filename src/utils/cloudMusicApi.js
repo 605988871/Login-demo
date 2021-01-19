@@ -1,4 +1,5 @@
 import axios from 'axios'
+import request from '../utils/request'
 //登录
 export async function phoneLogin(obj) {
   const res = await axios.post('/music/login/cellphone', obj)
@@ -27,8 +28,7 @@ export async function search(obj) {
 
 //搜索建议
 export async function searchSug(obj) {
-  const res = await axios.get('/music/search/suggest', {
+  return request.get('/music/search/suggest', {
     params: obj
   })
-  return res
 }

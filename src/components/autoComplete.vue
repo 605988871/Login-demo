@@ -6,45 +6,34 @@
       :dropdown-match-select-width="false"
       :dropdown-style="{ width: '300px' }"
       size="large"
+      :defaultActiveFirstOption="false"
       style="width: 100%"
       placeholder="input here"
       option-label-prop="value"
+      @search="handleSearch"
+      @change="handleChange"
     >
       <template slot="dataSource">
-        <a-select-opt-group v-for="group in dataSource" :key="group.title">
+        <a-select-opt-group v-for="group in dataSource.order" :key="group">
           <span slot="label">
-            {{ group.title }}
-            <a
-              style="float: right"
-              href="https://www.google.com/search?q=antd"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              more
-            </a>
+            {{ group | capitalize }}
           </span>
           <a-select-option
-            v-for="opt in group.children"
-            :key="opt.title"
-            :value="opt.title"
+            v-for="opt in filterSource[group]"
+            :key="opt.id"
+            :value="opt.name"
           >
-            {{ opt.title }}
-            <span class="certain-search-item-count">
-              {{ opt.count }} people
+            {{ opt.name }}
+            <!-- <span class="certain-search-item-count" v-if="opt.artists">
+              {{ opt.artists[0].name }}
             </span>
+            <span class="certain-search-item-count" v-if="opt.artist">
+              {{ opt.artist.name }}
+            </span> -->
           </a-select-option>
         </a-select-opt-group>
-        <a-select-option key="all" disabled class="show-all">
-          <a
-            href="https://www.google.com/search?q=ant-design-vue"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            View all results
-          </a>
-        </a-select-option>
       </template>
-      <a-input>
+      <a-input v-model="input">
         <a-icon slot="suffix" type="search" class="certain-category-icon" />
       </a-input>
     </a-auto-complete>
@@ -52,49 +41,13 @@
 </template>
 
 <script>
-const dataSource = [
-  {
-    title: 'Libraries',
-    children: [
-      {
-        title: 'AntDesign',
-        count: 10000
-      },
-      {
-        title: 'AntDesign UI',
-        count: 10600
-      }
-    ]
-  },
-  {
-    title: 'Solutions',
-    children: [
-      {
-        title: 'AntDesign UI',
-        count: 60100
-      },
-      {
-        title: 'AntDesign',
-        count: 30010
-      }
-    ]
-  },
-  {
-    title: 'Articles',
-    children: [
-      {
-        title: 'AntDesign design language',
-        count: 100000
-      }
-    ]
-  }
-]
 export default {
   name: '',
-  props: [''],
+  props: ['dataSource'],
   data() {
     return {
-      dataSource
+      input: '',
+      filterSource: {}
     }
   },
 
@@ -102,13 +55,59 @@ export default {
 
   computed: {},
 
-  watch: {},
+  watch: {
+    dataSource(val, oldVal) {
+      if (val.songs) {
+        this.filterSource['songs'] = this.reduceSearchSuggestions(val.songs)
+      }
+      if (val.artists) {
+        this.filterSource['artists'] = this.reduceSearchSuggestions(val.artists)
+      }
+      if (val.albums) {
+        this.filterSource['albums'] = this.reduceSearchSuggestions(val.albums)
+      }
+      if (val.playlists) {
+        this.filterSource['playlists'] = this.reduceSearchSuggestions(
+          val.playlists
+        )
+      }
+    }
+  },
 
   beforeMount() {},
 
   mounted() {},
 
-  methods: {}
+  filters: {
+    capitalize: function(value) {
+      if (value == 'songs') {
+        return '歌曲'
+      } else if (value == 'artists') {
+        return '歌手'
+      } else {
+        return '专辑'
+      }
+    }
+  },
+  methods: {
+    handleSearch(value) {
+      $('body').click()
+    },
+    reduceSearchSuggestions(suggestions) {
+      const set = new Set()
+      return suggestions.reduce((cur, next) => {
+        set.has(next.name) ? '' : set.add(next.name) && cur.push(next)
+        return cur
+      }, [])
+    },
+    handleChange() {
+      if (this.input) {
+        this.$emit('searchSug')
+      } else {
+        this.filterSource
+      }
+    }
+  }
 }
 </script>
 <style lang="less" scoped>

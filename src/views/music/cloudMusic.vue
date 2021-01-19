@@ -2,7 +2,11 @@
   <div>
     <el-button @click="login">登录</el-button>
     <el-button @click="logout">退出登录</el-button>
-    <auto-complete></auto-complete>
+    <auto-complete
+      ref="autoComplete"
+      :dataSource="dataSource"
+      @searchSug="searchSug"
+    ></auto-complete>
     <el-button @click="search">搜索</el-button>
     <el-button @click="searchSug">搜索建议</el-button>
   </div>
@@ -59,10 +63,12 @@ export default {
     },
     async searchSug() {
       let obj = {
-        keywords: this.keywords
+        keywords: this.$refs.autoComplete.input
       }
-      this.dataSource = await searchSug(obj)
-      console.log(this.dataSource)
+      try {
+        let dataSource = await searchSug(obj)
+        this.dataSource = dataSource.data.result
+      } catch (error) {}
     }
   }
 }
