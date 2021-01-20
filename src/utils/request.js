@@ -65,7 +65,6 @@ request.interceptors.response.use(
     const url = fullUrl.substring(frontIndex, tailIndex)
     requestList = requestList.filter(el => el === url)
     delete source[url]
-    console.log(res)
     return Promise.resolve(res)
   },
   err => {

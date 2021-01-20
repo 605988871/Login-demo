@@ -6,12 +6,17 @@
       :dropdown-match-select-width="false"
       :dropdown-style="{ width: '300px' }"
       size="large"
+      :open="open"
       :defaultActiveFirstOption="false"
       style="width: 100%"
       placeholder="input here"
       option-label-prop="value"
+      @blur="open = false"
+      @focus="focus"
+      @select="select"
       @search="handleSearch"
       @change="handleChange"
+      ref="input"
     >
       <template slot="dataSource">
         <a-select-opt-group v-for="group in dataSource.order" :key="group">
@@ -34,7 +39,12 @@
         </a-select-opt-group>
       </template>
       <a-input v-model="input">
-        <a-icon slot="suffix" type="search" class="certain-category-icon" />
+        <a-icon
+          slot="suffix"
+          @click="clickSearch"
+          type="search"
+          class="certain-category-icon"
+        />
       </a-input>
     </a-auto-complete>
   </div>
@@ -43,11 +53,18 @@
 <script>
 export default {
   name: '',
-  props: ['dataSource'],
+  props: {
+    dataSource: {
+      default() {
+        return { order: [] }
+      }
+    }
+  },
   data() {
     return {
       input: '',
-      filterSource: {}
+      filterSource: {},
+      open: false
     }
   },
 
@@ -57,19 +74,12 @@ export default {
 
   watch: {
     dataSource(val, oldVal) {
-      if (val.songs) {
-        this.filterSource['songs'] = this.reduceSearchSuggestions(val.songs)
-      }
-      if (val.artists) {
-        this.filterSource['artists'] = this.reduceSearchSuggestions(val.artists)
-      }
-      if (val.albums) {
-        this.filterSource['albums'] = this.reduceSearchSuggestions(val.albums)
-      }
-      if (val.playlists) {
-        this.filterSource['playlists'] = this.reduceSearchSuggestions(
-          val.playlists
-        )
+      if (val.order) {
+        for (var i = 0; i < val.order.length; i++) {
+          this.filterSource[val.order[i]] = this.reduceSearchSuggestions(
+            val[val.order[i]]
+          )
+        }
       }
     }
   },
@@ -84,17 +94,29 @@ export default {
         return '歌曲'
       } else if (value == 'artists') {
         return '歌手'
-      } else {
+      } else if (value == 'albums') {
         return '专辑'
+      } else {
+        return '歌单'
       }
     }
   },
   methods: {
     handleSearch(value) {
-      $('body').click()
+      this.$emit('searchSug')
+    },
+    focus() {
+      if (this.input) {
+        this.open = true
+      }
+    },
+    select() {
+      this.open = false
     },
     reduceSearchSuggestions(suggestions) {
       const set = new Set()
+      if (suggestions) {
+      }
       return suggestions.reduce((cur, next) => {
         set.has(next.name) ? '' : set.add(next.name) && cur.push(next)
         return cur
@@ -102,10 +124,15 @@ export default {
     },
     handleChange() {
       if (this.input) {
-        this.$emit('searchSug')
+        this.open = true
       } else {
-        this.filterSource
+        this.open = false
       }
+    },
+    clickSearch() {
+      setTimeout(() => {
+        this.open = false
+      }, 100)
     }
   }
 }

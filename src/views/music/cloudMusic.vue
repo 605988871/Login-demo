@@ -27,7 +27,9 @@ export default {
   data() {
     return {
       keywords: '',
-      dataSource: []
+      dataSource: {
+        order: []
+      }
     }
   },
 
