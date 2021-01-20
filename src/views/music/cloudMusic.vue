@@ -8,7 +8,6 @@
       @searchSug="searchSug"
     ></auto-complete>
     <el-button @click="search">搜索</el-button>
-    <el-button @click="searchSug">搜索建议</el-button>
   </div>
 </template>
 
