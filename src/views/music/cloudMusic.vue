@@ -6,8 +6,18 @@
       ref="autoComplete"
       :dataSource="dataSource"
       @searchSug="searchSug"
+      @search="search"
     ></auto-complete>
-    <el-button @click="search">搜索</el-button>
+    <div style="width:60%; margin: 0 auto;">
+      <el-tabs v-model="activeName" @tab-click="handleClick" stretch>
+        <el-tab-pane label="单曲" name="first">用户管理</el-tab-pane>
+        <el-tab-pane label="歌手" name="second">配置管理</el-tab-pane>
+        <el-tab-pane label="歌单" name="third">角色管理</el-tab-pane>
+        <el-tab-pane label="专辑" name="fourth">定时任务补偿</el-tab-pane>
+        <el-tab-pane label="MV" name="fifth">定时任务补偿</el-tab-pane>
+        <el-tab-pane label="电台" name="sixth">定时任务补偿</el-tab-pane>
+      </el-tabs>
+    </div>
   </div>
 </template>
 
@@ -25,10 +35,10 @@ export default {
   props: [''],
   data() {
     return {
-      keywords: '',
       dataSource: {
         order: []
-      }
+      },
+      activeName: 'first'
     }
   },
 
@@ -45,6 +55,7 @@ export default {
   mounted() {},
 
   methods: {
+    handleClick() {},
     async login() {
       let obj = {
         phone: '13726267254',
@@ -56,15 +67,13 @@ export default {
     async logout() {
       await logout()
     },
-    async search() {
-      let obj = {
-        keywords: this.keywords
-      }
-      await search(obj)
+    async search(obj) {
+      const res = await search(obj)
+      console.log(res)
     },
-    async searchSug() {
+    async searchSug(keywords) {
       let obj = {
-        keywords: this.$refs.autoComplete.input
+        keywords: keywords
       }
       try {
         let dataSource = await searchSug(obj)

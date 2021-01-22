@@ -17,6 +17,7 @@
         @select="select"
         @search="handleSearch"
         @change="handleChange"
+        v-model="keywords"
         ref="input"
       >
         <template slot="dataSource">
@@ -39,7 +40,7 @@
             </a-select-option>
           </a-select-opt-group>
         </template>
-        <a-input v-model="input">
+        <a-input>
           <a-icon
             slot="suffix"
             @click="clickSearch"
@@ -64,7 +65,7 @@ export default {
   },
   data() {
     return {
-      input: '',
+      keywords: '',
       filterSource: {},
       open: false
     }
@@ -105,15 +106,20 @@ export default {
   },
   methods: {
     handleSearch(value) {
-      this.$emit('searchSug')
+      //this.$emit('searchSug', this.keywords)
     },
     focus() {
-      if (this.input) {
+      if (this.keywords) {
         this.open = true
       }
     },
     select() {
+      let obj = {
+        keywords: this.keywords,
+        type: 1
+      }
       this.open = false
+      this.$emit('search', obj)
     },
     reduceSearchSuggestions(suggestions) {
       const set = new Set()
@@ -124,14 +130,16 @@ export default {
         return cur
       }, [])
     },
-    handleChange() {
-      if (this.input) {
+    handleChange(value) {
+      this.$emit('searchSug', this.keywords)
+      if (this.keywords) {
         this.open = true
       } else {
         this.open = false
       }
     },
     clickSearch() {
+      this.$emit('search', this.keywords)
       setTimeout(() => {
         this.open = false
       }, 100)
