@@ -1,52 +1,54 @@
 <template>
-  <div>
-    <a-auto-complete
-      class="certain-category-search"
-      dropdown-class-name="certain-category-search-dropdown"
-      :dropdown-match-select-width="false"
-      :dropdown-style="{ width: '300px' }"
-      size="large"
-      :open="open"
-      :defaultActiveFirstOption="false"
-      style="width: 100%"
-      placeholder="input here"
-      option-label-prop="value"
-      @blur="open = false"
-      @focus="focus"
-      @select="select"
-      @search="handleSearch"
-      @change="handleChange"
-      ref="input"
-    >
-      <template slot="dataSource">
-        <a-select-opt-group v-for="group in dataSource.order" :key="group">
-          <span slot="label">
-            {{ group | capitalize }}
-          </span>
-          <a-select-option
-            v-for="opt in filterSource[group]"
-            :key="opt.id"
-            :value="opt.name"
-          >
-            {{ opt.name }}
-            <!-- <span class="certain-search-item-count" v-if="opt.artists">
+  <div style="width:100%;text-align: center;">
+    <div class="autoComplete">
+      <a-auto-complete
+        class="certain-category-search"
+        dropdown-class-name="certain-category-search-dropdown"
+        :dropdown-match-select-width="false"
+        :dropdown-style="{ width: '300px' }"
+        size="large"
+        :open="open"
+        :defaultActiveFirstOption="false"
+        style="width: 100%"
+        placeholder="input here"
+        option-label-prop="value"
+        @blur="open = false"
+        @focus="focus"
+        @select="select"
+        @search="handleSearch"
+        @change="handleChange"
+        ref="input"
+      >
+        <template slot="dataSource">
+          <a-select-opt-group v-for="group in dataSource.order" :key="group">
+            <span slot="label">
+              {{ group | capitalize }}
+            </span>
+            <a-select-option
+              v-for="opt in filterSource[group]"
+              :key="opt.id"
+              :value="opt.name"
+            >
+              {{ opt.name }}
+              <!-- <span class="certain-search-item-count" v-if="opt.artists">
               {{ opt.artists[0].name }}
             </span>
             <span class="certain-search-item-count" v-if="opt.artist">
               {{ opt.artist.name }}
             </span> -->
-          </a-select-option>
-        </a-select-opt-group>
-      </template>
-      <a-input v-model="input">
-        <a-icon
-          slot="suffix"
-          @click="clickSearch"
-          type="search"
-          class="certain-category-icon"
-        />
-      </a-input>
-    </a-auto-complete>
+            </a-select-option>
+          </a-select-opt-group>
+        </template>
+        <a-input v-model="input">
+          <a-icon
+            slot="suffix"
+            @click="clickSearch"
+            type="search"
+            class="certain-category-icon"
+          />
+        </a-input>
+      </a-auto-complete>
+    </div>
   </div>
 </template>
 
@@ -138,6 +140,11 @@ export default {
 }
 </script>
 <style lang="less" scoped>
+.autoComplete {
+  width: 300px;
+  margin: 0 auto;
+}
+
 .certain-category-search-dropdown .ant-select-dropdown-menu-item-group-title {
   color: #666;
   font-weight: bold;
