@@ -25,7 +25,11 @@
         <li>
           <router-link :to="{ path: '/cloudMusic' }">网易云api</router-link>
         </li>
-        <li><a>友链</a></li>
+        <li>
+          <router-link :to="{ path: '/cloudMusicUserInfo' }">
+            网易云个人信息
+          </router-link>
+        </li>
         <li><a>维护</a></li>
         <li><a>投喂</a></li>
         <li><a>管理</a></li>
@@ -40,6 +44,7 @@
 </template>
 
 <script>
+import '@/style/layout.less'
 export default {
   name: 'layout',
   props: [''],
@@ -114,7 +119,7 @@ export default {
       display: inline-block;
       margin: 4px;
       text-align: center;
-      width: 84px;
+      width: 100px;
       height: 24px;
       outline: none;
       cursor: pointer;

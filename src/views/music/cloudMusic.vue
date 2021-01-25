@@ -1,34 +1,39 @@
 <template>
-  <div>
-    <el-button @click="login">登录</el-button>
-    <el-button @click="logout">退出登录</el-button>
+  <div class="wrapper">
     <auto-complete
       ref="autoComplete"
       :dataSource="dataSource"
       @searchSug="searchSug"
       @search="search"
+      style="margin:20px 0"
     ></auto-complete>
-    <div style="width:60%; margin: 0 auto;">
-      <el-tabs v-model="activeName" @tab-click="handleClick" stretch>
-        <el-tab-pane label="单曲" name="first">用户管理</el-tab-pane>
-        <el-tab-pane label="歌手" name="second">配置管理</el-tab-pane>
-        <el-tab-pane label="歌单" name="third">角色管理</el-tab-pane>
-        <el-tab-pane label="专辑" name="fourth">定时任务补偿</el-tab-pane>
-        <el-tab-pane label="MV" name="fifth">定时任务补偿</el-tab-pane>
-        <el-tab-pane label="电台" name="sixth">定时任务补偿</el-tab-pane>
-      </el-tabs>
+    <div style="width:60%;margin:0 auto;">
+      <a-tabs default-active-key="1">
+        <a-tab-pane key="1" tab="单曲">
+          Content of Tab Pane 1
+        </a-tab-pane>
+        <a-tab-pane key="2" tab="歌手" force-render>
+          Content of Tab Pane 2
+        </a-tab-pane>
+        <a-tab-pane key="3" tab="歌单">
+          Content of Tab Pane 3
+        </a-tab-pane>
+        <a-tab-pane key="4" tab="专辑">
+          Content of Tab Pane 4
+        </a-tab-pane>
+        <a-tab-pane key="5" tab="MV">
+          Content of Tab Pane 5
+        </a-tab-pane>
+        <a-tab-pane key="6" tab="电台">
+          Content of Tab Pane 6
+        </a-tab-pane>
+      </a-tabs>
     </div>
   </div>
 </template>
 
 <script>
-import {
-  phoneLogin,
-  logout,
-  banner,
-  search,
-  searchSug
-} from '../../utils/cloudMusicApi'
+import { banner, search, searchSug } from '../../utils/cloudMusicApi'
 import AutoComplete from '../../components/autoComplete.vue'
 export default {
   name: '',
@@ -56,17 +61,7 @@ export default {
 
   methods: {
     handleClick() {},
-    async login() {
-      let obj = {
-        phone: '13726267254',
-        password: '216c1301',
-        md5_password: this.$md5('216c1301')
-      }
-      await phoneLogin(obj)
-    },
-    async logout() {
-      await logout()
-    },
+
     async search(obj) {
       const res = await search(obj)
       console.log(res)
@@ -83,4 +78,4 @@ export default {
   }
 }
 </script>
-<style lang="less" scoped></style>
+<style lang="less"></style>

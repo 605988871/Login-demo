@@ -10,7 +10,7 @@
         :open="open"
         :defaultActiveFirstOption="false"
         style="width: 100%"
-        placeholder="input here"
+        placeholder="请输入关键词"
         option-label-prop="value"
         @blur="open = false"
         @focus="focus"
@@ -149,7 +149,7 @@ export default {
 </script>
 <style lang="less" scoped>
 .autoComplete {
-  width: 300px;
+  width: 30%;
   margin: 0 auto;
 }
 

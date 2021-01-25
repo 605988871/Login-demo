@@ -72,7 +72,7 @@
 <script>
 // @ is an alias to /src
 import axios from 'axios'
-
+import '@/style/Home.less'
 export default {
   name: 'Home',
   components: {},

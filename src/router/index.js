@@ -29,6 +29,11 @@ const routes = [
     path: '/cloudMusic',
     name: 'CloudMusic',
     component: () => import('../views/music/cloudMusic.vue')
+  },
+  {
+    path: '/cloudMusicUserInfo',
+    name: 'CloudMusicUserInfo',
+    component: () => import('../views/music/cloudMusicUserInfo.vue')
   }
 ]
 
