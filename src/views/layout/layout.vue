@@ -23,7 +23,9 @@
           <router-link :to="{ path: '/test' }">水墨按钮</router-link>
         </li>
         <li>
-          <router-link :to="{ path: '/cloudMusic' }">网易云api</router-link>
+          <router-link :to="{ path: '/cloudMusicSearch' }">
+            网易云api
+          </router-link>
         </li>
         <li>
           <router-link :to="{ path: '/cloudMusicUserInfo' }">
@@ -62,6 +64,16 @@ export default {
 
   mounted() {
     var star = require('../../utils/star')
+    window.addEventListener('scroll', function() {
+      let t = $('body, html').scrollTop() // 目前监听的是整个body的滚动条距离
+      if (t > parseFloat($('.header').css('height'))) {
+        $('.menu').addClass('box-active')
+        $('.card').addClass('card-active')
+      } else {
+        $('.card').removeClass('card-active')
+        $('.menu').removeClass('box-active')
+      }
+    })
   },
 
   methods: {
@@ -138,5 +150,9 @@ export default {
       }
     }
   }
+}
+.box-active {
+  position: fixed;
+  top: 0;
 }
 </style>

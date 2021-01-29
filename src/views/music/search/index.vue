@@ -10,7 +10,7 @@
     <div style="width:60%;margin:0 auto;">
       <a-tabs default-active-key="1">
         <a-tab-pane key="1" tab="单曲">
-          Content of Tab Pane 1
+          <song-list :song-list="songList"></song-list>
         </a-tab-pane>
         <a-tab-pane key="2" tab="歌手" force-render>
           Content of Tab Pane 2
@@ -33,8 +33,9 @@
 </template>
 
 <script>
-import { banner, search, searchSug } from '../../utils/cloudMusicApi'
-import AutoComplete from '../../components/autoComplete.vue'
+import { banner, search, searchSug } from '@/utils/cloudMusicApi'
+import AutoComplete from '@/components/autoComplete.vue'
+import SongList from './components/songList.vue'
 export default {
   name: '',
   props: [''],
@@ -43,12 +44,14 @@ export default {
       dataSource: {
         order: []
       },
+      songList: [],
       activeName: 'first'
     }
   },
 
   components: {
-    AutoComplete
+    AutoComplete,
+    SongList
   },
 
   computed: {},
@@ -62,9 +65,32 @@ export default {
   methods: {
     handleClick() {},
 
-    async search(obj) {
+    async search(keywords) {
+      let obj = {
+        keywords: keywords
+      }
       const res = await search(obj)
-      console.log(res)
+      this.songList = []
+      let songListBefore = res.data.result.songs
+      songListBefore.forEach((item, index) => {
+        let artistList = item.ar
+        let artists = ''
+        for (var i = 0; i < artistList.length; i++) {
+          artists =
+            i == artistList.length - 1
+              ? artists + artistList[i].name
+              : artists + artistList[i].name + '/'
+        }
+        let song = {
+          key: index,
+          name: item.name,
+          artist: artists,
+          album: item.al.name,
+          hot: item.pop,
+          time: item.dt
+        }
+        this.songList.push(song)
+      })
     },
     async searchSug(keywords) {
       let obj = {
