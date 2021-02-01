@@ -58,11 +58,18 @@ export default {
   name: '',
   props: {
     dataSource: {
+      type: Object,
       default() {
-        return { order: [] }
+        return {
+          order: []
+        }
       }
+    },
+    activeKey: {
+      type: String
     }
   },
+  //props: ['dataSource', 'activeKey'],
   data() {
     return {
       keywords: '',
@@ -89,7 +96,9 @@ export default {
 
   beforeMount() {},
 
-  mounted() {},
+  mounted() {
+    console.log('key', this.activeKey)
+  },
 
   filters: {
     capitalize: function(value) {
@@ -116,10 +125,11 @@ export default {
     select() {
       let obj = {
         keywords: this.keywords,
-        type: 1
+        type: this.activeKey,
+        limit: '10'
       }
       this.open = false
-      this.$emit('search', obj)
+      this.$emit('search')
     },
     reduceSearchSuggestions(suggestions) {
       const set = new Set()
@@ -139,7 +149,12 @@ export default {
       }
     },
     clickSearch() {
-      this.$emit('search', this.keywords)
+      let obj = {
+        keywords: this.keywords,
+        type: this.activeKey,
+        limit: '10'
+      }
+      this.$emit('search')
       setTimeout(() => {
         this.open = false
       }, 100)

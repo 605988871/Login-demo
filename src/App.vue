@@ -6,7 +6,7 @@
         <router-view></router-view>
       </keep-alive>
     </transition>
-    <div style="height: 100px;"></div>
+    <div style="height: 150px;"></div>
     <div
       id="jsi-flying-fish-container"
       style="
