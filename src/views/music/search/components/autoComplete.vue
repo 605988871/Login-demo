@@ -96,9 +96,7 @@ export default {
 
   beforeMount() {},
 
-  mounted() {
-    console.log('key', this.activeKey)
-  },
+  mounted() {},
 
   filters: {
     capitalize: function(value) {

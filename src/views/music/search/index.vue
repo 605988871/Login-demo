@@ -43,7 +43,7 @@ import { banner, search, searchSug } from '@/utils/cloudMusicApi'
 import AutoComplete from './components/autoComplete.vue'
 import SongList from './components/songList.vue'
 export default {
-  name: '',
+  name: 'CloudMusicSearch',
   props: [''],
   data() {
     return {
@@ -74,9 +74,11 @@ export default {
   methods: {
     async handleChange(activeKey) {
       this.activeKey = activeKey
-      try {
-        this.search()
-      } catch (error) {}
+      if (this.$refs.autoComplete.keywords) {
+        try {
+          this.search()
+        } catch (error) {}
+      }
     },
 
     async search(pageChange) {
@@ -123,7 +125,8 @@ export default {
             artist: artists,
             album: item.al.name,
             hot: item.pop,
-            time: item.dt
+            time: item.dt,
+            id: item.id
           }
           this.songList.push(song)
         })

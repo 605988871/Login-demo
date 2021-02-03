@@ -31,7 +31,7 @@ export default {
             'https://unpkg.com/live2d-widget-model-hijiki/assets/hijiki.model.json'
           // 'https://unpkg.com/live2d-widget-model-shizuku@latest/assets/shizuku.model.json'
         },
-        display: { position: 'right' },
+        display: { position: 'left' },
         mobile: { show: true },
         react: {
           opacity: 0.8

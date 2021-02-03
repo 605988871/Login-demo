@@ -6,11 +6,11 @@
       :loading="loading"
       :pagination="false"
     >
-      <div slot="operation">
+      <div slot="operation" slot-scope="text, record">
         <a-icon
           type="play-circle"
-          style="fontSize:20px;margin:0 10px;color:rgb(215, 0, 15);cursor: pointer;
-"
+          style="fontSize:20px;margin:0 10px;color:rgb(215, 0, 15);cursor: pointer;"
+          @click="play(record)"
         />
         <a-icon
           type="plus-circle"
@@ -136,6 +136,9 @@ export default {
     },
     resetPage() {
       this.page = 1
+    },
+    play(record) {
+      console.log(record)
     }
   }
 }
