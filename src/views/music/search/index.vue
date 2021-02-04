@@ -96,6 +96,7 @@ export default {
           this.$refs.songList.showLoading()
         }
         const res = await search(obj)
+        console.log(res)
         if (this.activeKey == '1') {
           this.formatSongList(res)
           this.$refs.songList.hideLoading()
@@ -126,6 +127,7 @@ export default {
             album: item.al.name,
             hot: item.pop,
             time: item.dt,
+            picUrl: item.al.picUrl,
             id: item.id
           }
           this.songList.push(song)

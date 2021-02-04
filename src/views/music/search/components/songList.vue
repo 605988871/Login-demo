@@ -14,8 +14,8 @@
         />
         <a-icon
           type="plus-circle"
-          style="fontSize:20px;color:rgb(215, 0, 15);cursor: pointer;
-"
+          style="fontSize:20px;color:rgb(215, 0, 15);cursor: pointer;"
+          @click="add(record)"
         />
       </div>
       <div slot="hot" slot-scope="text, record">
@@ -139,6 +139,11 @@ export default {
     },
     play(record) {
       console.log(record)
+    },
+    add(record) {
+      this.$store.commit('setPlayList', record)
+      this.$message.success('添加成功', 1)
+      console.log(this.$store.state.playList)
     }
   }
 }

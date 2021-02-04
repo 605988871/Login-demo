@@ -1,12 +1,14 @@
-import Vue from "vue";
-import Vuex from "vuex";
+import Vue from 'vue'
+import Vuex from 'vuex'
 import Cookie from 'js-cookie'
+import { reduceSearchSuggestions } from '@/utils/reduce'
 
-Vue.use(Vuex);
+Vue.use(Vuex)
 
 export default new Vuex.Store({
   state: {
-    token: ''
+    token: '',
+    playList: []
   },
   mutations: {
     setToken(state, val) {
@@ -19,8 +21,15 @@ export default new Vuex.Store({
     },
     getToken(state) {
       state.token = Cookie.get('token')
+    },
+    setPlayList(state, song) {
+      state.playList.push(song)
+      state.playList = reduceSearchSuggestions(state.playList)
+    },
+    clearPlayList(state) {
+      state.playList = []
     }
   },
   actions: {},
   modules: {}
-});
+})

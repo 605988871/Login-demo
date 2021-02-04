@@ -118,29 +118,6 @@ export default {
 }
 </script>
 <style>
-body {
-  min-width: 1200px;
-}
-body::-webkit-scrollbar {
-  width: 6px;
-  height: 6px;
-  background-color: #eee;
-}
-body::-webkit-scrollbar-thumb {
-  background: #fe9600;
-}
-body::-webkit-scrollbar-track {
-  background-color: #eee;
-}
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-  height: 130vh;
-}
-
 #nav {
   padding: 30px;
 }
